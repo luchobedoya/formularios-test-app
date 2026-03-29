@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 
-export const authRoutes: Routes = [
+export const countryRoutes: Routes = [
   {
     path: '',
     children: [
@@ -13,3 +13,5 @@ export const authRoutes: Routes = [
     ]
   }
 ];
+
+export default countryRoutes;
