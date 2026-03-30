@@ -1,6 +1,7 @@
 import { JsonPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormUtils } from '../../../utils/forms/formUtils';
 
 @Component({
   selector: 'app-basic-page',
@@ -11,6 +12,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 export default class BasicPage {
 
   private _fb = inject(FormBuilder);
+  formUtils = FormUtils;
 
   public myForm = this._fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -20,30 +22,40 @@ export default class BasicPage {
 
   onSave() {
     console.log(this.myForm.value);
-  }
-
-  isValidField( field: string ): boolean | null {
-    return !!this.myForm.get(field)?.errors;
-  }
-
-  getFieldError(fieldName : string ) {
-    if (!this.myForm.get(fieldName)) return;
-
-    const errors = this.myForm.get(fieldName)?.errors ?? {};
-
-    for (const error of Object.keys(errors)) {
-      switch (error) {
-        case 'required':
-          return 'Este campo es requerido';
-        case 'minlength':
-          return `Este campo debe tener minimo ${errors['minlength'].requiredLength} caracteres`;
-        case 'min':
-          return `Este campo debe tener un valor minimo de ${errors['min'].min}`;
-          default:
-          return 'Este campo es invalido';
-      }
+    if (this.myForm.invalid) {
+           this.myForm.markAllAsTouched();
+           return;
     }
-    return null;
+
+    this.myForm.reset({
+      price: 0,
+      inStorage: 0,
+    })
+
   }
+
+  // isValidField( field: string ): boolean {
+  //   return !!(this.myForm.get(field)?.errors && this.myForm.get(field)?.touched);
+  // }
+
+  // getFieldError(fieldName : string ) {
+  //   if (!this.myForm.get(fieldName)) return;
+
+  //   const errors = this.myForm.get(fieldName)?.errors ?? {};
+
+  //   for (const error of Object.keys(errors)) {
+  //     switch (error) {
+  //       case 'required':
+  //         return 'Este campo es requerido';
+  //       case 'minlength':
+  //         return `Este campo debe tener minimo ${errors['minlength'].requiredLength} caracteres`;
+  //       case 'min':
+  //         return `Este campo debe tener un valor minimo de ${errors['min'].min}`;
+  //         default:
+  //         return 'Este campo es invalido';
+  //     }
+  //   }
+  //   return null;
+  // }
 
 }
