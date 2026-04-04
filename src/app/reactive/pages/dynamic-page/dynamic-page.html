@@ -23,19 +23,28 @@
     <!-- Agregar Favorito -->
     <div class="mb-3 row">
         <label class="col-sm-3 col-form-label">Agregar</label>
-        <div class="col-sm-9">
-
+        <div class="col-sm-9" >
+            
             <div class="input-group">
                 <input class="form-control"
-                       placeholder="Agregar favorito">
+                       placeholder="Agregar favorito" 
+                       [formControl]="newFavorite"
+                       (keyup.enter)="addFavoriteGame()">
 
 
                 <button class="btn btn-outline-primary"
-                        type="button">
+                        type="button"
+                        (click)="addFavoriteGame()">
                     Agregar favorito
                 </button>
             </div>
+             @if(formUtils.isValidFieldAdd(newFavorite)) {       
+                <span class="form-text text-danger">
+                   Campo Requerido
+                </span>
+                } 
         </div>
+        
     </div>
 
 
@@ -49,10 +58,12 @@
 
                 <div class="input-group">
                     <input class="form-control"
-                    [formControlName]="i">
+                    [formControlName]="i"
+                    [disabled]="true">
 
                     <button class="btn btn-outline-danger"
-                            type="button">
+                            type="button"
+                            (click)="deleteFavoriteGame(i)">
                       Eliminar
                   </button>
                 </div>
@@ -73,8 +84,8 @@
         <div class="col-sm-12">
             <button type="submit"
                     class="btn btn-primary float-end"
+                    [disabled]="myForm.invalid"
                     >
-                    <!-- [disabled]="myForm.invalid" -->
                 Guardar
             </button>
         </div>

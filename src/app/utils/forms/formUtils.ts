@@ -1,8 +1,12 @@
-import { FormArray, FormGroup, ValidationErrors } from "@angular/forms";
+import { FormArray, FormControl, FormGroup, ValidationErrors } from "@angular/forms";
 
 export class FormUtils {
     static isValidField( form: FormGroup, field: string ): boolean {
         return !!(form.get(field)?.errors && form.get(field)?.touched);
+    } 
+
+    static isValidFieldAdd( form: FormControl ): boolean {
+        return !!(form.errors && form.touched);
     } 
 
     static getFieldError(form: FormGroup, field: string) {
