@@ -19,7 +19,7 @@ export default class DynamicPage {
     favoriteGames: this._fb.array([
       [{ value: 'Metal Gear', disabled: true }, Validators.required],
       [{ value: 'Final Fantasy', disabled: true }, Validators.required],
-    ], Validators.minLength(3))
+    ], Validators.minLength(2))
   });
 
   get favoriteGames() {
@@ -46,6 +46,11 @@ export default class DynamicPage {
   // deleteFavoriteGame: Es la acción del botón "Eliminar". Saca de la lista el elemento que esté en la posición indicada.
   deleteFavoriteGame(index: number) {
     this.favoriteGames.removeAt(index);
+  }
+
+  onSubmit() {
+    console.log(this.myForm.value);
+    this.myForm.markAllAsTouched();
   }
 
 }
