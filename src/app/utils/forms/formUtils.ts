@@ -46,4 +46,8 @@ export class FormUtils {
         return null;
     }
 
+    static isFieldOneTouched(form: FormGroup, field: string) {
+        return form.get(field)?.touched;
+    }
+
 }
