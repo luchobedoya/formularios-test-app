@@ -39,6 +39,8 @@ export class FormUtils {
                     return `Este campo debe tener minimo ${errors['minlength'].requiredLength} caracteres`;
                 case 'min':
                     return `Este campo debe tener un valor minimo de ${errors['min'].min}`;
+                case 'email':
+                    return `El valor ingresado no es un correo electeronico`;
                 default:
                     return 'Este campo es invalido';
             }
