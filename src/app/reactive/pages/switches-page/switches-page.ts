@@ -23,6 +23,11 @@ export default class SwitchesPage {
   onSubmit() {
     console.log(this.myForm.value);
     this.myForm.markAllAsTouched();
+    if (this.myForm.invalid) {
+      alert('Formulario invalido');
+      return;
+    }
+    this.myForm.reset();
   }
 
 }
