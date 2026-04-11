@@ -14,9 +14,9 @@ export default class RegisterPage {
   formUtils = FormUtils;
 
   public myForm = this.fb.group({
-    name: ['', Validators.required],
-    email: ['', Validators.required],
-    username: ['', [Validators.required, Validators.minLength(3)]],
+    name: ['', [Validators.required, Validators.pattern(this.formUtils.namePattern)]],
+    email: ['', [Validators.required, Validators.pattern(this.formUtils.emailPattern)]],
+    username: ['', [Validators.required, Validators.minLength(3), Validators.pattern(this.formUtils.notOnlySpacesPattern)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     password2: ['', [Validators.required, Validators.minLength(6)]],
   })
