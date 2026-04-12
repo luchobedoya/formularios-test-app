@@ -1,6 +1,6 @@
 import { JsonPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormUtils } from '../../../utils/forms/formUtils';
 
 @Component({
@@ -19,7 +19,24 @@ export default class RegisterPage {
     username: ['', [Validators.required, Validators.minLength(3), Validators.pattern(this.formUtils.notOnlySpacesPattern)]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     password2: ['', [Validators.required, Validators.minLength(6)]],
-  })
+  }, {
+    validators: [this.formUtils.isFieldOneEqualFieldTwo('password', 'password2')],
+  }
+)
+
+  // isFieldOneEqualFieldTwo(field1: string, field2: string) {
+  //   return (formGroup: AbstractControl) => {
+  //     const field1Value = formGroup.get(field1)?.value;
+  //     const field2Value = formGroup.get(field2)?.value;
+
+  //     if (field1Value !== field2Value) {
+  //       return {
+  //         passwordNotMatch: true
+  //       }
+  //     }
+  //     return null;
+  //   }
+  // }
 
   onSubmit() {
     console.log(this.myForm.value);
