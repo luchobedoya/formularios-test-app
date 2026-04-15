@@ -42,6 +42,7 @@ export class FormUtils {
 
     static getTextError(errors: ValidationErrors) {
         for (const error of Object.keys(errors)) {
+            console.log(error);
             switch (error) {
                 case 'required':
                     return 'Este campo es requerido';
@@ -51,6 +52,8 @@ export class FormUtils {
                     return `Este campo debe tener un valor minimo de ${errors['min'].min}`;
                 case 'email':
                     return `El valor ingresado no es un correo electeronico`;
+                case 'notStrider':
+                    return `No se puede usar el valor strider en la app`;
                 default:
                     return 'Este campo es invalido';
             }
@@ -88,5 +91,15 @@ export class FormUtils {
     return null; 
   }
 
+
+  static notStrider(control: AbstractControl): ValidationErrors | null {
+    const value = control.value.toLowerCase();
+    if (value === 'strider') {
+        return {
+            notStrider: true
+        }
+    }
+    return null; 
+  }
 
 }
