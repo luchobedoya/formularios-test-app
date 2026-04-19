@@ -25,9 +25,11 @@
       <select formControlName="country" class="form-control">
         <option value="">-- Seleccione País --</option>
 
-        <!-- <option [value]="country.cca3">
-          {{ country.name }}
-        </option> -->
+        @for (country of countriesByRegion(); track $index) {
+          <option [value]="country.cca3">
+            {{ country.name?.common }}
+          </option>
+        }
 
       </select>
     </div>
@@ -54,6 +56,6 @@
 
 <h3>Formulario</h3>
 <code>
-  {{ 'myForm.value' | json }}
+  {{ myForm.value | json }}
 </code>
 <p>is form valid: {{ 'myForm.valid' }}</p>
