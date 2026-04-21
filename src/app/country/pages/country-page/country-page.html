@@ -27,7 +27,7 @@
 
         @for (country of countriesByRegion(); track $index) {
           <option [value]="country.cca3">
-            {{ country.name?.common }}
+            {{ country.name.common }}
           </option>
         }
 
@@ -44,10 +44,11 @@
       <select formControlName="borders" class="form-control">
         <option value="">-- Seleccione la frontera --</option>
 
-
-        <!-- <option [value]="country.cca3">
-          {{ country.name }}
-        </option> -->
+          @for (country of bordersByCountry(); track country.cca3) {
+          <option [value]="country.cca3">
+            {{ country.name }}
+          </option>
+        } 
       </select>
     </div>
   </div>

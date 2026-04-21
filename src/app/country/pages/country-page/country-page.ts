@@ -1,9 +1,8 @@
 import { JsonPipe } from '@angular/common';
 import { AfterViewInit, Component, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CountryService, Region } from '../../services/country';
-import { Country } from '../../interfaces/country.interface';
-import { count, switchMap, tap } from 'rxjs';
+import { CountryService, Region, SmallCountry } from '../../services/country';
+import { count, filter, of, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-country-page',
@@ -15,8 +14,8 @@ export default class CountryPage implements AfterViewInit {
   fb = inject(FormBuilder);
   countryServices = inject(CountryService);
   regions = signal(this.countryServices.getRegions());
-  countriesByRegion = signal<Country[]>([]);
-  bordersByCountry = signal<Country[]>([]);
+  countriesByRegion = signal<SmallCountry[]>([]);
+  bordersByCountry = signal<SmallCountry[]>([]);
 
   myForm = this.fb.group(
     {
@@ -36,8 +35,10 @@ export default class CountryPage implements AfterViewInit {
 
   OnFormChanged = effect(( onCleanup ) => {
     const formRegionChanged = this.OnRegionChanged();
+    const countrySubscription = this.onCountryChanged();
     onCleanup(() => {
       formRegionChanged?.unsubscribe();
+      countrySubscription?.unsubscribe();
       console.log('limpiado');
     })
   })
@@ -57,6 +58,34 @@ export default class CountryPage implements AfterViewInit {
         console.log(countries);
         this.countriesByRegion.set(countries);
     });
+  }
+
+  onCountryChanged() {
+    return this.myForm.get('country')?.valueChanges
+    .pipe(
+      tap(() => this.myForm.get('borders')?.reset('')),
+      filter((country) => country!.length > 0),
+      tap(() => {
+        this.bordersByCountry.set([]);
+      }
+    ),
+      switchMap((alphaCode) => this.countryServices.getCountryByAlphaCode(alphaCode as string)),
+      switchMap((country) => {
+        console.log(country);
+        return this.countryServices.getCountryBorderByCodes(country)
+      }),
+      tap((country) => this.bordersByCountry.set(country)),
+      tap((country) => console.log(country)),
+    ).subscribe(country => {
+        console.log(country);
+        this.bordersByCountry.set(country);
+    });
+  } 
+
+  extractFronts(country: SmallCountry[]): string[] {
+    const { borders = [] } = country[0];
+    if (borders.length === 0) return [];
+    return borders;
   }
 
 }

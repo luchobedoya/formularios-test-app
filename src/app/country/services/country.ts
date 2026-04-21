@@ -19,7 +19,7 @@ export interface SmallCountry {
     official: string;
   };
   cca3: string;
-  borders: string[]; // Ten en cuenta que algunos países en la API no tienen esta propiedad
+  borders?: string[]; // Ten en cuenta que algunos países en la API no tienen esta propiedad
 }
 
 @Injectable({
@@ -68,10 +68,15 @@ export class CountryService { // 3. Sufijo 'Service' para no chocar con el model
       );
   }
 
-  getCountryBorderByCodes(borders: string[]): Observable<SmallCountry[]> {
+  getCountryBorderByCodes(country: SmallCountry[]): Observable<SmallCountry[]> {  
+    const borders: string[] = [];
+    country.forEach((element: SmallCountry) => {
+      if (element.borders) {
+        borders.push(...element.borders);
+      }
+    });
     // 6. Validación robusta que también ignora si mandan un arreglo vacío "[]"
     if (!borders || borders.length === 0) return of([]);
-
     return this.http.get<SmallCountry[]>(`${this.baseUrl}/alpha?codes=${borders.join(',')}`)
       .pipe(
         catchError(error => {
