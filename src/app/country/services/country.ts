@@ -41,11 +41,20 @@ export class CountryService { // 3. Sufijo 'Service' para no chocar con el model
     Region.Antarctic
   ];
 
+  /**
+   * Obtiene la lista de regiones disponibles.
+   * @returns Un arreglo con las regiones definidas en el enum Region.
+   */
   getRegions(): Region[] {
     return [...this._regions];
   }
 
   // 5. Manejo de Errores con catchError
+  /**
+   * Obtiene la lista de países pertenecientes a una región específica.
+   * @param region La región por la cual filtrar los países.
+   * @returns Un Observable que emite un arreglo de objetos SmallCountry.
+   */
   getCountries(region: Region): Observable<SmallCountry[]> {
     if (!region) return of([]);
 
@@ -58,6 +67,11 @@ export class CountryService { // 3. Sufijo 'Service' para no chocar con el model
       );
   }
 
+  /**
+   * Busca la información de un país utilizando su código alfa (cca3).
+   * @param alphaCode El código alfa del país a buscar.
+   * @returns Un Observable que emite un arreglo con la información del país encontrado.
+   */
   getCountryByAlphaCode(alphaCode: string): Observable<SmallCountry[]> {
     return this.http.get<SmallCountry[]>(`${this.baseUrl}/alpha/${alphaCode}?fields=cca3,name,borders`)
       .pipe(
@@ -68,6 +82,11 @@ export class CountryService { // 3. Sufijo 'Service' para no chocar con el model
       );
   }
 
+  /**
+   * Obtiene la información básica de los países que son frontera de los países proporcionados.
+   * @param country Arreglo de países de los cuales se extraerán los códigos de fronteras.
+   * @returns Un Observable que emite un arreglo de SmallCountry con la información de las fronteras.
+   */
   getCountryBorderByCodes(country: SmallCountry[]): Observable<SmallCountry[]> {  
     const borders: string[] = [];
     country.forEach((element: SmallCountry) => {

@@ -25,14 +25,26 @@ export default class CountryPage implements AfterViewInit {
     }
   );
 
+  /**
+   * Maneja el envío del formulario.
+   * Actualmente solo imprime los valores del formulario en la consola.
+   */
   onSubmit() {
     console.log(this.myForm.value);
   }
 
+  /**
+   * Hook de ciclo de vida que se ejecuta después de que la vista del componente se ha inicializado.
+   */
    ngAfterViewInit(): void {
     console.log(this.regions());
   }
 
+  /**
+   * Efecto que reacciona a los cambios en el formulario.
+   * Se encarga de gestionar las suscripciones a los cambios de región y país,
+   * y asegura la limpieza de las mismas cuando el efecto se vuelve a ejecutar o se destruye.
+   */
   OnFormChanged = effect(( onCleanup ) => {
     const formRegionChanged = this.OnRegionChanged();
     const countrySubscription = this.onCountryChanged();
@@ -43,6 +55,11 @@ export default class CountryPage implements AfterViewInit {
     })
   })
 
+  /**
+   * Escucha los cambios en el campo 'region' del formulario.
+   * Cuando cambia la región, reinicia los campos de país y fronteras, y carga los países correspondientes.
+   * @returns Una suscripción al observable de cambios de valor de la región.
+   */
   OnRegionChanged() {
     return this.myForm.get('region')?.valueChanges
     .pipe(
@@ -60,6 +77,11 @@ export default class CountryPage implements AfterViewInit {
     });
   }
 
+  /**
+   * Escucha los cambios en el campo 'country' del formulario.
+   * Cuando cambia el país, reinicia el campo de fronteras y carga los países fronterizos.
+   * @returns Una suscripción al observable de cambios de valor del país.
+   */
   onCountryChanged() {
     return this.myForm.get('country')?.valueChanges
     .pipe(
@@ -82,6 +104,11 @@ export default class CountryPage implements AfterViewInit {
     });
   } 
 
+  /**
+   * Extrae la lista de códigos de fronteras de un arreglo de países.
+   * @param country Arreglo que contiene la información del país.
+   * @returns Un arreglo de strings con los códigos de los países fronterizos.
+   */
   extractFronts(country: SmallCountry[]): string[] {
     const { borders = [] } = country[0];
     if (borders.length === 0) return [];
